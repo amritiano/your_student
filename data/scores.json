@@ -1,0 +1,14 @@
+{
+  "total_points": 15,
+  "topics": {
+    "harmony_with_nature": {
+      "points": 5,
+      "interactions": 1
+    },
+    "nature_and_harmony": {
+      "points": 10,
+      "interactions": 2
+    }
+  },
+  "level": "Beginner"
+}
