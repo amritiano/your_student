@@ -1,7 +1,6 @@
-streamlit==1.32.0
+streamlit
 groq
-chromadb==0.4.15
 pypdf
-sentence-transformers==2.2.2
+sentence-transformers
 python-dotenv
-pydantic==1.10.13
+numpy

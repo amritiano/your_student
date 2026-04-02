@@ -1,34 +1,43 @@
-import chromadb
+import numpy as np
 from sentence_transformers import SentenceTransformer
 from typing import List
+import json
+import os
 
-# Load once, reuse everywhere
 EMBEDDING_MODEL = SentenceTransformer("all-MiniLM-L6-v2")
+
+STORE = {
+    "documents": [],
+    "embeddings": []
+}
 
 
 def embed_texts(texts: List[str]) -> List[List[float]]:
-    """Convert a list of strings into embedding vectors."""
     return EMBEDDING_MODEL.encode(texts).tolist()
 
 
 def embed_query(query: str) -> List[float]:
-    """Convert a single query string into an embedding vector."""
     return EMBEDDING_MODEL.encode([query])[0].tolist()
 
 
-def get_chroma_client(data_dir: str):
-    """Create a persistent ChromaDB client at the given folder."""
-    return chromadb.PersistentClient(path=data_dir)
+def get_chroma_client(data_dir: str = None):
+    return None
 
 
-def get_or_create_collection(client, collection_name: str = "document_chunks"):
-    """Get or create a ChromaDB collection."""
-    return client.get_or_create_collection(name=collection_name)
+def get_or_create_collection(client=None, collection_name: str = "document_chunks"):
+    return STORE
 
 
-def embed_and_store(chunks: List[str], collection):
-    """Embed each chunk and store in ChromaDB."""
+def embed_and_store(chunks: List[str], collection: dict):
     embeddings = embed_texts(chunks)
-    ids = ["chunk_" + str(i) for i in range(len(chunks))]
-    collection.upsert(documents=chunks, embeddings=embeddings, ids=ids)
-    print("Stored " + str(len(chunks)) + " chunks in ChromaDB.")
+    collection["documents"] = chunks
+    collection["embeddings"] = embeddings
+    print("Stored " + str(len(chunks)) + " chunks in memory.")
+
+
+def cosine_similarity(a: List[float], b: List[float]) -> float:
+    a = np.array(a)
+    b = np.array(b)
+    if np.linalg.norm(a) == 0 or np.linalg.norm(b) == 0:
+        return 0.0
+    return float(np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b)))
