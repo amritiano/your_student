@@ -1,6 +1,7 @@
 streamlit
 groq
-chromadb
+chromadb==0.4.24
 pypdf
-sentence-transformers
+sentence-transformers==2.2.2
 python-dotenv
+pysqlite3-binary
