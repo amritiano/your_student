@@ -6,7 +6,9 @@ from memory import ConversationMemory, format_memory_for_prompt
 from scoring import award_points
 
 load_dotenv()
-client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+import streamlit as st
+api_key = os.getenv("GROQ_API_KEY") or st.secrets.get("GROQ_API_KEY", "")
+client = Groq(api_key=api_key)
 
 SYSTEM_PROMPT = """
 You are an AI student learning from a document that a teacher has uploaded.
